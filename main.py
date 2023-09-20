@@ -49,17 +49,27 @@ def quadratic_multiply(x, y):
     return _quadratic_multiply(x,y).decimal_val
 
 def _quadratic_multiply(x, y):
-    ### TODO
-    pass
-    ###
-
-
-    
+    xvec = x.binary_vec
+    yvec = y.binary_vec
+    xvec, yvec = pad(xvec, yvec)
+    if binary2int(x)<=1 and binary2int(y)<=1:
+        return x*y
+    x_left, x_right=split_number(xvec)
+    y_left, y_right=split_number(yvec)
+    xlyl = _quadratic_multiply(x_left, y_left)
+    xlyr = _quadratic_multiply(x_left, y_right)
+    xryl = _quadratic_multiply(x_right, y_left)
+    xryr = _quadratic_multiply(x_right, y_right)
+    term1 = bit_shift(xlyl, len(xvec))
+    term2 = bit_shift((binary2int(xlyr)+ binary2int(xryl)), len(xvec) // 2)
+    term3 = xryr
+    result = term1 + term2 + term3
+    return product
     
 def test_quadratic_multiply(x, y, f):
     start = time.time()
     # multiply two numbers x, y using function f
-    
+    result=f(x,y)
     return (time.time() - start)*1000
 
 
